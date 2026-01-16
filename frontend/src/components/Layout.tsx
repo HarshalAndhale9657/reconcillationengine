@@ -1,18 +1,12 @@
 import { ReactNode } from 'react';
-import Sidebar from './Sidebar';
+import Sidebar from "./Sidebar";
+import "./Layout.css";
 
-interface LayoutProps {
-  children: ReactNode;
-  onNavigate: (page: string) => void;
-}
-
-export default function Layout({ children, onNavigate }: LayoutProps) {
+export default function Layout({ children }: { children: React.ReactNode }) {
   return (
     <div className="layout">
-      <Sidebar onNavigate={onNavigate} />
-      <main className="content">
-        {children}
-      </main>
+      <Sidebar />
+      <main className="content">{children}</main>
     </div>
   );
 }
