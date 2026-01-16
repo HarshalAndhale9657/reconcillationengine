@@ -1,41 +1,32 @@
-interface SidebarProps {
-  onNavigate: (page: string) => void;
-}
+import { NavLink } from "react-router-dom";
+import "./Sidebar.css";
 
-export default function Sidebar({ onNavigate }: SidebarProps) {
+export default function Sidebar() {
   return (
-    <nav className="sidebar">
-      <h2>Recon Engine</h2>
+    <aside className="sidebar">
+      <h1 className="logo">⚙️ Reconciliation Engine</h1>
 
-      <button onClick={() => onNavigate('dashboard')}>Dashboard</button>
-      <button onClick={() => onNavigate('transactions')}>Transactions</button>
-      <button onClick={() => onNavigate('alerts')}>Alerts</button>
-      <button onClick={() => onNavigate('raw')}>Raw Events</button>
-      <button onClick={() => onNavigate('ingestion')}>Ingestion</button>
-    </nav>
+      <nav className="nav">
+        <NavLink to="/" end className="nav-item">
+          📊 Dashboard
+        </NavLink>
+
+        <NavLink to="/transactions" className="nav-item">
+          💳 Transactions
+        </NavLink>
+
+        <NavLink to="/alerts" className="nav-item">
+          🚨 Alerts
+        </NavLink>
+
+        <NavLink to="/raw-events" className="nav-item">
+          📥 Raw Events
+        </NavLink>
+
+        <NavLink to="/ingestion" className="nav-item">
+          ⚡ Ingestion
+        </NavLink>
+      </nav>
+    </aside>
   );
 }
-
-<style>{`
-  aside {
-    background: linear-gradient(180deg, #020617, #020617);
-  }
-
-  .nav {
-    padding: 10px 12px;
-    border-radius: 8px;
-    color: #cbd5f5;
-    text-decoration: none;
-    font-size: 15px;
-  }
-
-  .nav:hover {
-    background: rgba(255,255,255,0.08);
-  }
-
-  .nav.active {
-    background: rgba(255,255,255,0.15);
-    color: white;
-    font-weight: 600;
-  }
-`}</style>
