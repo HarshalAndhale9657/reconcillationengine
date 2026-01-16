@@ -11,16 +11,21 @@ export default function App() {
 
   const renderPage = () => {
     switch (page) {
-      case 'transactions': return <Transactions />;
-      case 'alerts': return <Alerts />;
-      case 'raw': return <RawTransactions />;
-      case 'ingestion': return <Ingestion />;
-      default: return <Dashboard />;
+      case 'transactions':
+        return <Transactions />;
+      case 'alerts':
+        return <Alerts />;
+      case 'raw':
+        return <RawTransactions />;
+      case 'ingestion':
+        return <Ingestion />;
+      default:
+        return <Dashboard />;
     }
   };
 
   return (
-    <Layout onNavigate={setPage}>
+    <Layout onNavigate={setPage} activePage={page}>
       {renderPage()}
     </Layout>
   );
