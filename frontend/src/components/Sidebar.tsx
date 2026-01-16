@@ -1,31 +1,50 @@
-import { NavLink } from "react-router-dom";
 import "./Sidebar.css";
 
-export default function Sidebar() {
+type SidebarProps = {
+  currentPage: string;
+  onNavigate: (page: string) => void;
+};
+
+export default function Sidebar({ currentPage, onNavigate }: SidebarProps) {
   return (
     <aside className="sidebar">
       <h1 className="logo">⚙️ Reconciliation Engine</h1>
 
       <nav className="nav">
-        <NavLink to="/" end className="nav-item">
+        <button
+          className={`nav-item ${currentPage === "dashboard" ? "active" : ""}`}
+          onClick={() => onNavigate("dashboard")}
+        >
           📊 Dashboard
-        </NavLink>
+        </button>
 
-        <NavLink to="/transactions" className="nav-item">
+        <button
+          className={`nav-item ${currentPage === "transactions" ? "active" : ""}`}
+          onClick={() => onNavigate("transactions")}
+        >
           💳 Transactions
-        </NavLink>
+        </button>
 
-        <NavLink to="/alerts" className="nav-item">
+        <button
+          className={`nav-item ${currentPage === "alerts" ? "active" : ""}`}
+          onClick={() => onNavigate("alerts")}
+        >
           🚨 Alerts
-        </NavLink>
+        </button>
 
-        <NavLink to="/raw-events" className="nav-item">
+        <button
+          className={`nav-item ${currentPage === "raw" ? "active" : ""}`}
+          onClick={() => onNavigate("raw")}
+        >
           📥 Raw Events
-        </NavLink>
+        </button>
 
-        <NavLink to="/ingestion" className="nav-item">
+        <button
+          className={`nav-item ${currentPage === "ingestion" ? "active" : ""}`}
+          onClick={() => onNavigate("ingestion")}
+        >
           ⚡ Ingestion
-        </NavLink>
+        </button>
       </nav>
     </aside>
   );
