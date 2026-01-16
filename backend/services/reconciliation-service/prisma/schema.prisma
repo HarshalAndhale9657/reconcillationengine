@@ -1,0 +1,110 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client"
+  output   = "../generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+
+/////////////////////////////
+// ENUMS
+/////////////////////////////
+
+enum TransactionSource {
+  BANK
+  GATEWAY
+  APP
+}
+
+enum TransactionStatus {
+  SUCCESS
+  FAILED
+  PENDING
+}
+
+enum ReconciliationStatus {
+  INCOMPLETE
+  MATCHED
+  AMOUNT_MISMATCH
+  STATUS_MISMATCH
+  TIMEOUT_MISSING
+}
+
+enum AlertSeverity {
+  LOW
+  MEDIUM
+  HIGH
+}
+
+/////////////////////////////
+// RAW TRANSACTIONS
+/////////////////////////////
+
+model TransactionRaw {
+  id              String              @id @default(uuid())
+  transactionId   String
+  source          TransactionSource
+  amount          Float
+  status          TransactionStatus
+  eventTimestamp  DateTime
+  receivedAt      DateTime            @default(now())
+
+  @@index([transactionId])
+  @@unique([transactionId, source])
+}
+
+/////////////////////////////
+// TRANSACTION STATE (PARTIAL DATA HANDLING)
+/////////////////////////////
+
+model TransactionState {
+  id                String    @id @default(uuid())
+  transactionId     String    @unique
+  firstSeenAt       DateTime
+  lastUpdatedAt     DateTime  @updatedAt
+  receivedSources   String[]  // ["BANK", "GATEWAY"]
+  state             ReconciliationStatus
+
+  reconciliation    ReconciliationResult?
+}
+
+/////////////////////////////
+// RECONCILIATION RESULT
+/////////////////////////////
+
+model ReconciliationResult {
+  id                   String                 @id @default(uuid())
+  transactionId        String                 @unique
+  reconciliationStatus ReconciliationStatus
+  details              String?
+  reconciledAt         DateTime               @default(now())
+
+  state                TransactionState       @relation(fields: [transactionId], references: [transactionId])
+  alerts               Alert[]
+}
+
+/////////////////////////////
+// ALERTS
+/////////////////////////////
+
+model Alert {
+  id                   String        @id @default(uuid())
+  transactionId        String
+  reconciliationId     String
+  severity             AlertSeverity
+  message              String
+  createdAt            DateTime      @default(now())
+  resolved             Boolean       @default(false)
+
+  reconciliation       ReconciliationResult @relation(fields: [reconciliationId], references: [id])
+
+  @@index([transactionId])
+}

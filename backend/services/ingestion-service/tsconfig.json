@@ -1,0 +1,17 @@
+{
+  "compilerOptions": {
+    "target": "ES2020",
+    "module": "CommonJS",
+    "baseUrl": ".",
+    "paths": {
+      "@backend/common": ["../../packages/common"],
+      "@backend/common/*": ["../../packages/common/*"]
+    },
+    "moduleResolution": "node",
+    "rootDirs": ["./src", "../../packages/common"],
+    "outDir": "./dist",
+    "strict": true,
+    "esModuleInterop": true,
+    "skipLibCheck": true
+  }
+}
